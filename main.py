@@ -5,6 +5,7 @@ ENV_URL = os.environ.get("MAKEFUN_ENV_URL") or sys.exit("MAKEFUN_ENV_URL not set
 
 VALUE = {"p": 1, "n": 3, "b": 3, "r": 5, "q": 9, "k": 0}
 PSQ = {"p": [0, 1, 2, 3, 4, 5, 6, 7], "n": [-1, -1, -1, 0, 0, 1, 1, 1]}
+CENTER = {"d4", "d5", "e4", "e5"}
 
 
 def post(path, body):
@@ -41,7 +42,8 @@ def rank(move, board):
     taken = VALUE.get(victim.lower(), 0) if victim else 0
     promo = VALUE.get(move[4], 0) if len(move) == 5 else 0
     psq = PSQ.get(mover, [0] * 8)[int(move[3]) - 1] if mover in PSQ else 0
-    return (-taken, -promo, VALUE[mover], -psq, move)
+    center = 1 if move[2:4] in CENTER else 0
+    return (-taken, -promo, VALUE[mover], -psq, -center, move)
 
 
 def choose(fen, legal):
